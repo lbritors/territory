@@ -1,9 +1,9 @@
-from csv_utils import look_csv
 import asyncio
 from titlecase import titlecase
 from unidecode import unidecode
-from db.sqlite_access import get_dimensao_from_db, get_all_territories
-from csv_utils import look_csv
+from brasil.db.sqlite_access import get_dimensao_from_db
+from brasil.api.ibge_api import get_territory_api_ibge
+from brasil.utils.csv_utils import look_csv
 
 
 def normalize_name(area):
@@ -11,20 +11,26 @@ def normalize_name(area):
 
 
 async def main():
-    nome = "Bahia"
+    nome = "Mato Grosso"
     ter_dict = look_csv()
     if nome in ter_dict.values():
         ter_id = next(key for key, value in ter_dict.items() if value == nome)
         dimensao = await get_dimensao_from_db(ter_id)
-        print(nome, dimensao)
+        if dimensao is not None:
+            print(f" Territorio: {nome}, Dimensão: {dimensao}")
+            return
+
+        result = await get_territory_api_ibge(ter_id, nome)
+        if result:
+            print(f" Territorio: {result['nome']}, Dimensão: {result['dimensao']}, via IBGE")
+        else:
+            print(f"Falha ao buscar dados na api")
+
     else:
-        print("deu ruim")
-    territories = await get_all_territories()
-    print(territories)
+        print(f"Esse território não existe: {nome}")
 
 
 if __name__ == "__main__":
-    ##look_csv(r"C:\Users\lbrit\OneDrive\Documentos\Programas\python\scientificloud\dict.csv")
     asyncio.run(main())
 
 

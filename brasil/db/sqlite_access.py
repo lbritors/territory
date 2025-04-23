@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-DB_PATH = Path(os.getenv("DB_PATH"))
+DB_PATH = Path(os.getenv("DB_PATH", "database.db"))
 
 
 async def get_db_connection():
@@ -31,11 +31,23 @@ async def get_dimensao_from_db(territory_id: str) -> Optional[float]:
     return result["dimensao"] if result else None
 
 
-async def save_territory(territory_id: int, nome: str, dimensao: float):
-    conn = await get_db_connection()
-    await conn.execute(
-        "INSERT INTO territorios (id, nome, dimensao) VALUES (?, ?, ?)",
-        (territory_id, nome, dimensao)
-    )
-    await conn.commit()
-    await conn.close()
+async def save_territory_db(territory_id: int, nome: str, dimensao: float):
+    # conn = await get_db_connection()
+    # await conn.execute(
+    #     "INSERT INTO territorios (id, nome, dimensao) VALUES (?, ?, ?)",
+    #     (territory_id, nome, dimensao)
+    # )
+    # await conn.commit()
+    # await conn.close()
+    # return "deu certo?????"
+    try:
+        async with aiosqlite.connect(DB_PATH) as conn:
+            await conn.execute(
+                "INSERT INTO territorios (id, nome, dimensao) VALUES (?, ?, ?)",
+                (territory_id, nome, dimensao)
+            )
+            await conn.commit()
+            return True
+    except aiosqlite.Error as e:
+        print(f"Erro ao salvar no banco de dados: {e}")
+        return False
