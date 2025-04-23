@@ -19,4 +19,3 @@ build/
 !.env.example  # Mantém .env.example no controle de versão
 
 *.sqlite3  # Bancos de dados locais
-*.db
