@@ -1,0 +1,22 @@
+.env
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+dist/
+build/
+*.egg-info/
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários
+*.bak
+*.swp
+*~
+
+.env
+!.env.example  # Mantém .env.example no controle de versão
+
+*.sqlite3  # Bancos de dados locais
+*.db
