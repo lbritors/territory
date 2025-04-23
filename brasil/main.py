@@ -7,8 +7,10 @@ from brasil.utils.csv_utils import look_csv
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
+
 async def main():
-    nome = "Paraíba"
+    nome = "Pará"
+    id = 41
     # ter_dict = look_csv()
     # if nome in ter_dict.values():
     #     ter_id = next(key for key, value in ter_dict.items() if value == nome)
@@ -17,9 +19,9 @@ async def main():
     #         print(f" Territorio: {nome}, Dimensão: {dimensao}")
     #         return
 
-    result = await get_territory_data(nome)
+    result = await get_territory_data(41)
     if result:
-        print(f" Territorio: {result['nome']}, Dimensão: {result['dimensao']}, via IBGE")
+        print(f" Territorio: {result['nome']}, Dimensão: {result['dimensao']}")
     else:
         print(f"Falha ao buscar dados na api")
 
