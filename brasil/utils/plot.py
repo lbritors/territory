@@ -7,6 +7,8 @@ def generate_dimension_plot(nome: str, dimensao: float):
     plt.bar(nome, dimensao, color="skyblue")
     plt.ylabel("Dimensão (km²)")
     plt.title(f"Dimensão de {nome}")
+    plt.grid(True, axis="y", linestyle="--", alpha=0.7)
+    plt.ylim(0, dimensao * 1.2)
     plt.tight_layout()
 
     output_dir = Path("graphs")
