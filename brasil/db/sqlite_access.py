@@ -14,21 +14,30 @@ async def get_db_connection():
     return conn
 
 async def get_all_territories():
-    conn = await get_db_connection();
-    cursor = await conn.execute(
-        "SELECT * FROM territorios"
-    )
-    result = await cursor.fetchall()
-    return {row["id"]: row["nome"] for row in result} if result else None
-
+    # conn = await get_db_connection();
+    # cursor = await conn.execute(
+    #     "SELECT * FROM territorios"
+    # )
+    # result = await cursor.fetchall()
+    # return {row["id"]: row["nome"] for row in result} if result else None
+    async with aiosqlite.connect(DB_PATH) as conn:
+        conn.row_factory = aiosqlite.Row
+        async with conn.execute("SELECT * FROM territorios") as cursor:
+            result = await cursor.fetchall()
+            return {row["id"]: row["nome"] for row in result} if result else None
 
 async def get_dimensao_from_db(territory_id: str) -> Optional[float]:
     id = int(territory_id)
-    conn = await get_db_connection()
-    cursor = await conn.execute("SELECT * FROM territorios WHERE id = ?", (id,))
-    result = await cursor.fetchone()
-    await conn.close()
-    return result["dimensao"] if result else None
+    # conn = await get_db_connection()
+    # cursor = await conn.execute("SELECT * FROM territorios WHERE id = ?", (id,))
+    # result = await cursor.fetchone()
+    # await conn.close()
+    # return result["dimensao"] if result else None
+    async with aiosqlite.connect(DB_PATH) as conn:
+        conn.row_factory = aiosqlite.Row
+        async with conn.execute("SELECT * FROM territorios WHERE id = ?", (id,)) as cursor:
+            result = await cursor.fetchone()
+            return result["dimensao"] if result else None
 
 
 async def save_territory_db(territory_id: int, nome: str, dimensao: float):

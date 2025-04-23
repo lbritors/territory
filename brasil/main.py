@@ -1,17 +1,20 @@
 import asyncio
+import sys
 from titlecase import titlecase
 from unidecode import unidecode
 from brasil.db.sqlite_access import get_dimensao_from_db
 from brasil.api.ibge_api import get_territory_api_ibge
 from brasil.utils.csv_utils import look_csv
 
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 def normalize_name(area):
     print(titlecase(unidecode(area.strip().lower())))
 
 
 async def main():
-    nome = "Mato Grosso"
+    nome = "Paraíba"
     ter_dict = look_csv()
     if nome in ter_dict.values():
         ter_id = next(key for key, value in ter_dict.items() if value == nome)
