@@ -9,9 +9,9 @@ Cache em Banco de Dados: Armazena os dados consultados em um banco SQLite para e
 
 Gráficos: Gera visualizações com Matplotlib, salvas em uma pasta graphs/.
 
-Pré-requisitos
+## Pré-requisitos
 
-##Python: Versão 3.9 ou superior.
+Python: Versão 3.9 ou superior.
 * Dependências: Listadas em requirements.txt.
 
 * Sistema Operacional: Testado em Windows
